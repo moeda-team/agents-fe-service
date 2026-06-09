@@ -1,7 +1,14 @@
 import { Bot, MessageSquarePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  const isLoggedIn = false; // cek session/token
+
+  if (!isLoggedIn) {
+    redirect("/login");
+  }
+
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
       <div className="flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
