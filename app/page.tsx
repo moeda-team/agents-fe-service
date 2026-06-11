@@ -19,7 +19,9 @@ export default async function Home() {
         </h1>
         <p className="max-w-md text-sm text-muted-foreground sm:text-base">
           Kamu berhasil masuk sebagai{" "}
-          <span className="font-medium text-foreground">@{result.username}</span>
+          <span className="font-medium text-foreground">
+            @{result.username}
+          </span>
           . Halaman chat akan segera tersedia.
         </p>
       </div>
