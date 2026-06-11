@@ -1,13 +1,12 @@
+import { redirect } from "next/navigation";
 import { Bot, MessageSquarePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
+import { getMeAction } from "@/actions/auth";
+import { LogoutButton } from "@/components/logout-button";
 
-export default function Home() {
-  const isLoggedIn = false; // cek session/token
-
-  if (!isLoggedIn) {
-    redirect("/login");
-  }
+export default async function Home() {
+  const result = await getMeAction();
+  if (!result.success) redirect("/login");
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
@@ -16,17 +15,21 @@ export default function Home() {
       </div>
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          AI Agent Chat
+          Selamat datang, {result.fullName}! 👋
         </h1>
         <p className="max-w-md text-sm text-muted-foreground sm:text-base">
-          Foundation siap — shadcn/ui (zinc), lucide-react, dan dark mode
-          otomatis aktif. Halaman chat akan di-slice dari desain.
+          Kamu berhasil masuk sebagai{" "}
+          <span className="font-medium text-foreground">@{result.username}</span>
+          . Halaman chat akan segera tersedia.
         </p>
       </div>
-      <Button size="lg">
-        <MessageSquarePlus />
-        Mulai Chat
-      </Button>
+      <div className="flex gap-3">
+        <Button size="lg">
+          <MessageSquarePlus />
+          Mulai Chat
+        </Button>
+        <LogoutButton />
+      </div>
     </main>
   );
 }
