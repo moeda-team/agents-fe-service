@@ -31,7 +31,7 @@ serverApi.interceptors.response.use(
             `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/refresh`,
             { refreshToken }
           );
-          const tokens = res.data.tokens ?? res.data;
+          const tokens = res.data;
 
           cookieStore.set("access_token", tokens.accessToken, {
             httpOnly: false,
