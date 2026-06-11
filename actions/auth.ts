@@ -54,6 +54,12 @@ export async function getMeAction(): Promise<ActionResult<UserData>> {
 
 export async function logoutAction() {
   const cookieStore = await cookies();
+  const refreshToken = cookieStore.get("refresh_token")?.value;
+
+  if (refreshToken) {
+    await serverApi.post("/v1/auth/logout", { refreshToken }).catch(() => {});
+  }
+
   cookieStore.delete("access_token");
   cookieStore.delete("refresh_token");
 }
