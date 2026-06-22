@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/user";
-import { mockMessages } from "@/lib/mock/chat";
-import { Conversation } from "@/components/chat/conversation";
-import { MessageInput } from "@/components/chat/message-input";
+import { getConversationAction, getTokenCountAction } from "@/actions/chat";
+import { getSkillsAction } from "@/actions/skill";
+import { ConversationClient } from "@/components/chat/conversation-client";
+import type { Message } from "@/types/chat";
 
 interface ConversationPageProps {
   params: Promise<{ id: string }>;
@@ -10,16 +11,36 @@ interface ConversationPageProps {
 
 export default async function ConversationPage({ params }: ConversationPageProps) {
   const { id } = await params;
-  const messages = mockMessages[id];
-  if (!messages) notFound();
 
-  const result = await getCurrentUser();
-  const userInitial = result.success ? result.fullName[0].toUpperCase() : "R";
+  const [convResult, userResult, tokenResult, skillsResult] = await Promise.all([
+    getConversationAction(id),
+    getCurrentUser(),
+    getTokenCountAction(id),
+    getSkillsAction(),
+  ]);
+
+  if (!convResult.success) notFound();
+
+  const messages: Message[] = convResult.messages.map((m) => ({
+    id: m.id,
+    role: m.role,
+    content: m.content,
+    createdAt: m.createdAt,
+  }));
+
+  const userInitial = userResult.success ? userResult.fullName[0].toUpperCase() : "R";
+  const tokenCount = tokenResult.success
+    ? { estimatedTokens: tokenResult.estimatedTokens, messageCount: tokenResult.messageCount }
+    : undefined;
+  const skills = skillsResult.success ? skillsResult.data : [];
 
   return (
-    <div className="flex h-full flex-col">
-      <Conversation messages={messages} userInitial={userInitial} />
-      <MessageInput />
-    </div>
+    <ConversationClient
+      conversationId={id}
+      initialMessages={messages}
+      userInitial={userInitial}
+      tokenCount={tokenCount}
+      skills={skills}
+    />
   );
 }
