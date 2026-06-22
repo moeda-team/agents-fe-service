@@ -4,22 +4,22 @@ const quickActions = [
   {
     icon: BarChart2,
     title: "Riset & Analisis",
-    subtitle: "Analisis 8 kompetitor utama",
+    subtitle: "Cari insight, data, dan tren terbaru",
   },
   {
     icon: FileText,
     title: "Buat Konten",
-    subtitle: "Buat & optimalkan konten",
+    subtitle: "Artikel, caption, email, dan lainnya",
   },
   {
     icon: Database,
     title: "Analisis Data",
-    subtitle: "Olah dan fahami data",
+    subtitle: "Olah dan visualisasi data dengan mudah",
   },
   {
     icon: AlignLeft,
     title: "Rangkuman",
-    subtitle: "Ringkasan yang efisien",
+    subtitle: "Ringkas dokumen manjadi poin penting",
   },
 ];
 
