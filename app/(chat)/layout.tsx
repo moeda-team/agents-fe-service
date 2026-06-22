@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/user";
+import { getConversationsAction } from "@/actions/chat";
 import { SidebarNav } from "@/components/chat/sidebar-nav";
 import { HistoryPanel } from "@/components/chat/history-panel";
 import { BottomNav } from "@/components/chat/bottom-nav";
 import { ChatHeader } from "@/components/chat/chat-header";
+import type { Conversation } from "@/types/chat";
 
 export default async function ChatLayout({
   children,
@@ -15,11 +17,20 @@ export default async function ChatLayout({
 
   const user = { fullName: result.fullName, username: result.username };
 
+  const convsResult = await getConversationsAction();
+  const conversations: Conversation[] =
+    convsResult.success && Array.isArray(convsResult.data)
+      ? convsResult.data
+      : [];
+
   return (
     <>
       <div className="flex h-screen overflow-hidden bg-background">
         <SidebarNav className="hidden md:flex" />
-        <HistoryPanel className="hidden md:flex" />
+        <HistoryPanel
+          className="hidden md:flex"
+          initialConversations={conversations}
+        />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <ChatHeader user={user} />
           <main className="flex-1 overflow-hidden pb-16 md:pb-0">
