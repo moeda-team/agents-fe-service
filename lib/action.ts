@@ -10,6 +10,7 @@ export async function withAction<T extends object>(
     return { success: true, ...data };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Terjadi kesalahan.";
+    console.error("[action error]", err);
     return { success: false, error: message };
   }
 }
